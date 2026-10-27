@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PLL Capture Range and Lock Range – ECE Learning Page</title>
+<style>
+:root{--bg:#f6f8f7;--card:#fff;--ink:#12262b;--mut:#4a6068;--line:#cfdad8;--acc:#0b6e6e;--amb:#c26a00;--ok:#1b7f3b;--bad:#b3261e;--hl:#fff4dc;--code:#eaf3f2}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1b1e;--card:#162a2e;--ink:#e6f0ee;--mut:#9db4b3;--line:#2c4549;--acc:#4fc3c0;--amb:#f2a541;--ok:#5fd07f;--bad:#ff8a80;--hl:#2e2a1a;--code:#1d3438}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+header{background:#0d2f33;color:#fff;padding:36px 20px 28px}
+header .w,main,nav .w{max-width:1000px;margin:auto}
+header h1{font:700 clamp(26px,5vw,40px)/1.2 Georgia,"Times New Roman",serif;margin:0 0 8px}
+header p{margin:4px 0;color:#cfe6e4}header ul{margin:10px 0 0;padding-left:20px;color:#e8f4f2;columns:2;column-gap:30px}
+@media(max-width:640px){header ul{columns:1}}
+nav{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);z-index:5}
+nav .w{display:flex;gap:4px;overflow-x:auto;padding:8px 12px}
+nav a{white-space:nowrap;color:var(--acc);text-decoration:none;padding:6px 10px;border-radius:6px;font-size:14px;font-weight:600}
+nav a:hover,nav a:focus-visible{background:var(--code);outline:2px solid var(--acc)}
+main{padding:10px 16px 60px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:22px 0}
+h2{font:700 26px/1.25 Georgia,serif;margin:0 0 12px;color:var(--acc)}h3{margin:18px 0 6px;font-size:18px}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:15px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}th{background:var(--code)}
+.eq{background:var(--code);border-left:4px solid var(--acc);padding:10px 14px;margin:10px 0;font:17px/1.7 Cambria,Georgia,serif;overflow-x:auto}
+.key{background:var(--hl);border-left:4px solid var(--amb);padding:10px 14px;margin:12px 0;border-radius:4px}
+.fig{margin:14px 0;text-align:center}.fig svg{max-width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}
+figcaption{font-size:14px;color:var(--mut);margin-top:4px}
+svg text{fill:var(--ink);font:13px Segoe UI,Arial,sans-serif}svg .l{stroke:var(--ink);fill:none;stroke-width:1.8}svg .b{fill:var(--code);stroke:var(--acc);stroke-width:2}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:10px;border:1px solid var(--line);margin-left:6px}
+.Easy{color:var(--ok)}.Moderate{color:var(--amb)}.Difficult{color:var(--bad)}
+.q{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:12px 0}
+.q label{display:block;padding:4px 6px;border-radius:5px;cursor:pointer}.q input{margin-right:8px}
+.q.ok{border-color:var(--ok);border-left-width:6px}.q.no{border-color:var(--bad);border-left-width:6px}.q.un{border-color:var(--amb);border-left-width:6px}
+.ex{display:none;margin-top:8px;padding:8px 10px;background:var(--code);border-radius:6px;font-size:15px}.show{display:block}
+.fb{font-weight:700;margin-top:6px}
+button{background:var(--acc);color:#fff;border:0;border-radius:6px;padding:8px 16px;font:600 15px inherit;font-family:inherit;cursor:pointer;margin:6px 6px 6px 0}
+button.sec{background:transparent;color:var(--acc);border:1px solid var(--acc)}button:focus-visible{outline:3px solid var(--amb)}
+.score{font-size:20px;font-weight:700;margin:8px 0}
+details{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:8px 0}summary{cursor:pointer;font-weight:600}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.calc label{font-size:14px;font-weight:600}.calc input{width:100%;padding:7px;font-size:16px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.out{font:600 16px/1.8 Cambria,Georgia,serif}
+footer{text-align:center;color:var(--mut);padding:20px;font-size:14px}
+@media print{nav,button,.calc,footer{display:none!important}body{background:#fff;color:#000;font-size:11pt}section{break-inside:avoid-page;border:1px solid #999}header{background:#fff;color:#000;border-bottom:2px solid #000}header p,header ul{color:#000}.ex{display:block!important}details{display:block}details>*{display:block}}
+</style></head><body>
+<header><div class="w">
+<h1>PLL Capture Range and Lock Range</h1>
+<p><b>Subject:</b> Analog Electronics (Linear ICs) &nbsp;|&nbsp; <b>Unit:</b> Phase-Locked Loop (PLL) &nbsp;|&nbsp; <b>Level:</b> B.E./B.Tech ECE &nbsp;|&nbsp; <b>Simulation tool:</b> Multisim</p>
+<p>Learning objectives – after this page you can:</p>
+<ul><li>Define free-running, lock and capture ranges</li><li>Explain why capture range ≤ lock range</li><li>Compute f<sub>0</sub>, Δf<sub>L</sub>, Δf<sub>C</sub> for the LM565 PLL</li><li>Derive Δω<sub>C</sub> ≈ √(Δω<sub>L</sub>/τ)</li><li>Solve GATE-style numericals</li><li>Answer core-company interview questions</li></ul>
+</div></header>
+<nav><div class="w">
+<a href="#intro">Introduction</a><a href="#diagram">Circuit</a><a href="#working">Working</a><a href="#waves">Waveforms</a><a href="#math">Equations</a><a href="#solved">Solved problems</a><a href="#gate">GATE</a><a href="#interview">Interview</a><a href="#apps">Applications</a><a href="#quiz">Topic quiz</a><a href="#revision">Revision</a></div></nav>
+<main>
+
+<section id="intro"><h2>1. Introduction and learning objectives</h2>
+<p>A <b>phase-locked loop (PLL)</b> is a feedback system that forces the phase (and hence frequency) of an internal voltage-controlled oscillator (VCO) to follow the phase of an input signal. It has three blocks: a phase detector (PD), a low-pass loop filter (LPF) and a VCO.</p>
+<h3>Operating principle</h3>
+<p>The PD produces a voltage proportional to the phase difference between input and VCO output. The LPF removes the high-frequency terms and keeps the DC/slow component V<sub>c</sub>. V<sub>c</sub> retunes the VCO until its frequency equals the input frequency, leaving a constant phase error.</p>
+<div class="key"><b>Two ranges every PLL has:</b><br><b>Lock range (hold range)</b> – band of input frequencies around f<sub>0</sub> over which a PLL that is <i>already locked</i> stays locked.<br><b>Capture range (pull-in range)</b> – band of input frequencies around f<sub>0</sub> from which an <i>unlocked</i> PLL can acquire lock. Capture range ≤ lock range, and it depends on the loop-filter bandwidth.</div>
+<h3>Why it matters</h3><p>Lock range tells you how far the input may drift before the system loses the signal; capture range tells you how close the input must start for the PLL to find it. Both appear in receiver, clock-recovery and frequency-synthesizer design.</p>
+<h3>Prerequisites</h3><p>Op-amp/analog multiplier basics, RC low-pass filter and time constant, VCO concept, feedback and phase, Fourier idea of sum and difference frequencies.</p>
+<h3>Terminology</h3>
+<table><tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Free-running frequency f<sub>0</sub></td><td>VCO frequency when the PLL has no input (control voltage at its rest value)</td></tr>
+<tr><td>Locked state</td><td>f<sub>VCO</sub> = f<sub>in</sub> with constant phase error θ<sub>e</sub></td></tr>
+<tr><td>Beat note</td><td>Difference-frequency component |f<sub>in</sub> − f<sub>VCO</sub>| at the PD output while unlocked</td></tr>
+<tr><td>K<sub>d</sub>, K<sub>o</sub></td><td>PD gain (V/rad) and VCO gain (rad/s per V)</td></tr>
+<tr><td>Loop filter</td><td>Low-pass filter F(s); sets capture behaviour and noise</td></tr></table>
+<h3>Classification</h3><p>Linear PLL (analog multiplier PD), digital PLL (XOR / edge-triggered PD with analog VCO), all-digital PLL (ADPLL), software PLL. First-order (no filter) and second-order (RC or lag-lead filter) loops.</p>
+</section>
+
+<section id="diagram"><h2>2. Circuit and block diagrams</h2>
+<figure class="fig"><svg viewBox="0 0 660 190" role="img" aria-label="PLL block diagram">
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0L9,4.5L0,9z" fill="currentColor"/></marker></defs>
+<g color="var(--ink)">
+<line class="l" x1="20" y1="70" x2="90" y2="70" marker-end="url(#a)"/><text x="20" y="60">f<tspan font-size="10" dy="3">in</tspan><tspan dy="-3"> (V</tspan><tspan font-size="10" dy="3">s</tspan><tspan dy="-3">)</tspan></text>
+<rect class="b" x="92" y="40" width="120" height="60" rx="6"/><text x="108" y="66">Phase detector</text><text x="116" y="84">K<tspan font-size="10" dy="3">d</tspan><tspan dy="-3"> (V/rad)</tspan></text>
+<line class="l" x1="212" y1="70" x2="270" y2="70" marker-end="url(#a)"/><text x="218" y="60">V<tspan font-size="10" dy="3">d</tspan></text>
+<rect class="b" x="272" y="40" width="130" height="60" rx="6"/><text x="292" y="66">Loop filter F(s)</text><text x="296" y="84">low-pass RC</text>
+<line class="l" x1="402" y1="70" x2="450" y2="70" marker-end="url(#a)"/><text x="410" y="60">V<tspan font-size="10" dy="3">c</tspan></text>
+<rect class="b" x="452" y="40" width="110" height="60" rx="6"/><text x="478" y="66">VCO</text><text x="462" y="84">K<tspan font-size="10" dy="3">o</tspan><tspan dy="-3"> (rad/s/V)</tspan></text>
+<line class="l" x1="562" y1="70" x2="640" y2="70" marker-end="url(#a)"/><text x="580" y="60">f<tspan font-size="10" dy="3">out</tspan></text>
+<polyline class="l" points="600,70 600,150 152,150 152,100" marker-end="url(#a)"/><text x="260" y="168">feedback: VCO output returns to the phase detector</text></g></svg>
+<figcaption>Fig. 1 – PLL block diagram (generic, with signal names).</figcaption></figure>
+<figure class="fig"><svg viewBox="0 0 660 270" role="img" aria-label="LM565 external connections">
+<g color="var(--ink)">
+<rect class="b" x="250" y="50" width="170" height="150" rx="6"/><text x="300" y="80">LM565 PLL</text><text x="268" y="105">PD → 3.6 kΩ → VCO</text>
+<text x="20" y="108">f<tspan font-size="10" dy="3">in</tspan></text><line class="l" x1="48" y1="104" x2="95" y2="104"/><line class="l" x1="95" y1="95" x2="95" y2="113"/><line class="l" x1="105" y1="95" x2="105" y2="113"/><line class="l" x1="105" y1="104" x2="250" y2="104"/><text x="78" y="88">C (coupling)</text>
+<line class="l" x1="420" y1="104" x2="500" y2="104"/><text x="505" y="108">VCO / f<tspan font-size="10" dy="3">out</tspan></text>
+<line class="l" x1="285" y1="50" x2="285" y2="25"/><path class="l" d="M285 25 l-6 -5 l12 -5 l-12 -5 l12 -5 l-6 -5"/><text x="296" y="22">R<tspan font-size="10" dy="3">T</tspan></text>
+<line class="l" x1="385" y1="50" x2="385" y2="28"/><line class="l" x1="375" y1="28" x2="395" y2="28"/><line class="l" x1="375" y1="22" x2="395" y2="22"/><text x="402" y="26">C<tspan font-size="10" dy="3">T</tspan></text>
+<text x="20" y="150">+V<tspan font-size="10" dy="3">CC</tspan><tspan dy="-3"> = +6 V</tspan></text><line class="l" x1="110" y1="146" x2="250" y2="146"/>
+<text x="20" y="185">−V<tspan font-size="10" dy="3">EE</tspan><tspan dy="-3"> = −6 V</tspan></text><line class="l" x1="110" y1="181" x2="250" y2="181"/>
+<line class="l" x1="335" y1="200" x2="335" y2="225"/><line class="l" x1="322" y1="225" x2="348" y2="225"/><line class="l" x1="322" y1="225" x2="322" y2="225"/><line class="l" x1="322" y1="233" x2="348" y2="233"/><text x="356" y="232">C<tspan font-size="10" dy="3">2</tspan><tspan dy="-3"> (loop-filter capacitor, to supply)</tspan></text>
+</g></svg>
+<figcaption>Fig. 2 – Simplified LM565 external connections: R<sub>T</sub>, C<sub>T</sub> set f<sub>0</sub>; C<sub>2</sub> with the internal 3.6 kΩ forms the loop filter. Pin numbers are omitted – follow the datasheet pinout when wiring in Multisim.</figcaption></figure>
+<table><tr><th>Component</th><th>Function</th></tr>
+<tr><td>R<sub>T</sub>, C<sub>T</sub></td><td>Timing network: f<sub>0</sub> = 1.2/(4R<sub>T</sub>C<sub>T</sub>); R<sub>T</sub> should lie between 2 kΩ and 20 kΩ</td></tr>
+<tr><td>C<sub>2</sub> + internal 3.6 kΩ</td><td>First-order low-pass loop filter, τ = 3.6 kΩ × C<sub>2</sub>; larger C<sub>2</sub> ⇒ narrower capture range</td></tr>
+<tr><td>Input coupling capacitor</td><td>Blocks DC from the source</td></tr>
+<tr><td>±V<sub>CC</sub></td><td>Supply; lock range ∝ 1/V (V = total supply)</td></tr></table>
+</section>
+
+<section id="working"><h2>3. Working principle</h2>
+<h3>Step-by-step operation</h3>
+<ol><li><b>Free-running:</b> with no input the VCO runs at f<sub>0</sub>.</li>
+<li><b>Input applied, outside capture range:</b> the PD output has a beat component at |f<sub>in</sub> − f<sub>0</sub>|. The LPF attenuates it so strongly that V<sub>c</sub> barely swings and the VCO is not pulled in. The loop stays unlocked.</li>
+<li><b>Input inside capture range:</b> the beat note is slow enough to pass the filter. It frequency-modulates the VCO; the VCO is dragged toward f<sub>in</sub> and, within a few beat cycles, locks.</li>
+<li><b>Locked:</b> the PD gives a DC voltage that holds the VCO at f<sub>in</sub>. V<sub>c</sub> = (f<sub>in</sub> − f<sub>0</sub>)/K<sub>o</sub>(Hz/V). The phase error grows as f<sub>in</sub> moves from f<sub>0</sub>.</li>
+<li><b>Input drifts further:</b> the phase error reaches ±90° (PD output saturates at its maximum). Beyond that the loop cannot hold the VCO – lock is lost. That edge is the <b>lock range</b>.</li></ol>
+<div class="key">Capture is a <i>dynamic</i> (filter-limited) process; lock is a <i>static</i> (DC-gain-limited) property. Hence Δf<sub>C</sub> &lt; Δf<sub>L</sub> whenever the loop filter has finite bandwidth.</div>
+<h3>DC vs AC behaviour</h3><p><b>DC:</b> sets f<sub>0</sub>, the PD offset and the lock range through the DC loop gain. <b>AC:</b> the beat-note amplitude at the VCO input is F(jΔω)·K<sub>d</sub>…; the filter decides whether the beat can swing the VCO far enough to reach f<sub>in</sub>.</p>
+<h3>Assumptions</h3><p>Linear PD in the range |θ<sub>e</sub>| ≤ π/2; first-order RC loop filter; K<sub>o</sub> constant over the range; Δω<sub>C</sub>·τ ≫ 1 for the capture approximation.</p>
+<h3>Advantages, limitations, design considerations</h3>
+<table><tr><th>Wide capture</th><th>Narrow capture</th></tr><tr><td>Fast acquisition, but more noise and reference spurs pass the loop</td><td>Better noise/jitter rejection, but slower acquisition and risk of missing the signal</td></tr></table>
+<p>Design choice: use a swept VCO or frequency-aided acquisition (frequency detector, charge-pump PFD) when a narrow loop must still acquire from a large offset.</p>
+<h3>Common misconceptions</h3>
+<ul><li>“Capture and lock range are the same.” – No; capture ≤ lock.</li><li>“Larger C<sub>2</sub> widens the lock range.” – No; it narrows capture only.</li><li>“Locked means zero phase error.” – No; constant phase error that depends on f<sub>in</sub> − f<sub>0</sub>.</li><li>“Lock range is ±f<sub>0</sub>.” – No; for the 565 it is ±7.8f<sub>0</sub>/V.</li></ul>
+</section>
+
+<section id="waves"><h2>4. Waveforms and simulation output</h2>
+<p>No Multisim screenshot was attached, so the figures below are <b>illustrative</b> (generated from the formulas), not simulation results. If you run Multisim, compare the f<sub>in</sub> at which the output first follows the input (capture) and the f<sub>in</sub> at which it later loses the input (lock). Capture is found by sweeping in from far away; lock by sweeping outward from f<sub>0</sub>.</p>
+<figure class="fig"><svg id="fsvg" viewBox="0 0 660 190" role="img" aria-label="Lock and capture band diagram"></svg>
+<figcaption>Fig. 3 – Illustrative frequency axis (updates with the calculator below): wide band = lock range, inner band = capture range.</figcaption></figure>
+<figure class="fig"><svg viewBox="0 0 660 230" role="img" aria-label="Control voltage versus input frequency">
+<g color="var(--ink)"><line class="l" x1="60" y1="115" x2="630" y2="115" marker-end="url(#a)"/><line class="l" x1="345" y1="215" x2="345" y2="15" marker-end="url(#a)"/>
+<polyline class="l" style="stroke:var(--acc);stroke-width:3" points="70,115 150,115 150,175 540,55 540,115 620,115"/>
+<line x1="150" y1="115" x2="150" y2="175" style="stroke:var(--amb);stroke-dasharray:4"/><line x1="540" y1="115" x2="540" y2="55" style="stroke:var(--amb);stroke-dasharray:4"/>
+<text x="130" y="195">f<tspan font-size="10" dy="3">0</tspan><tspan dy="-3"> − Δf</tspan><tspan font-size="10" dy="3">L</tspan></text><text x="505" y="40">f<tspan font-size="10" dy="3">0</tspan><tspan dy="-3"> + Δf</tspan><tspan font-size="10" dy="3">L</tspan></text>
+<text x="352" y="135">f<tspan font-size="10" dy="3">0</tspan></text><text x="580" y="105">f<tspan font-size="10" dy="3">in</tspan></text><text x="352" y="22">V<tspan font-size="10" dy="3">c</tspan></text><text x="250" y="90">V<tspan font-size="10" dy="3">c</tspan><tspan dy="-3"> ∝ (f</tspan><tspan font-size="10" dy="3">in</tspan><tspan dy="-3"> − f</tspan><tspan font-size="10" dy="3">0</tspan><tspan dy="-3">) inside lock range</tspan></text></g></svg>
+<figcaption>Fig. 4 – Illustrative: inside the lock range the control voltage tracks f<sub>in</sub> − f<sub>0</sub> linearly (the segment from lower to upper limit, sketched schematically); outside it the beat note appears and V<sub>c</sub> is no longer a clean DC level.</figcaption></figure>
+<h3>Interpreting a real Multisim run</h3>
+<ul><li>Locked: input and output show the same frequency, with a fixed phase offset.</li><li>Unlocked: output frequency stays near f<sub>0</sub>; V<sub>c</sub> shows a beat ripple.</li><li>Expect hysteresis: the frequency at which lock is lost differs from the frequency at which it is acquired.</li></ul>
+</section>
+
+<section id="math"><h2>5. Equations and derivations</h2>
+<h3>5.1 Free-running frequency (LM565)</h3>
+<div class="eq">f<sub>0</sub> = 1.2 / (4 R<sub>T</sub> C<sub>T</sub>) &nbsp; [Hz; R<sub>T</sub> in Ω, C<sub>T</sub> in F]</div><p>Applies to the 565 VCO with 2 kΩ ≤ R<sub>T</sub> ≤ 20 kΩ.</p>
+<h3>5.2 General lock range</h3>
+<div class="eq">Δω<sub>L</sub> = ± (π/2) · K<sub>d</sub> · K<sub>o</sub> · F(0)</div>
+<p>K<sub>d</sub> in V/rad, K<sub>o</sub> in (rad/s)/V, F(0) is the filter DC gain (dimensionless), Δω<sub>L</sub> in rad/s. <i>Derivation:</i> in lock, V<sub>c</sub> = K<sub>d</sub>θ<sub>e</sub>F(0) and Δω = K<sub>o</sub>V<sub>c</sub>. The PD stays linear up to |θ<sub>e</sub>| = π/2, so the maximum VCO shift is K<sub>o</sub>K<sub>d</sub>F(0)·π/2. Physical meaning: lock range grows with DC loop gain and does not depend on filter bandwidth.</p>
+<h3>5.3 LM565 lock range</h3>
+<div class="eq">Δf<sub>L</sub> = ± 7.8 f<sub>0</sub> / V &nbsp; [Hz; V = (+V<sub>CC</sub>) − (−V<sub>EE</sub>) in volts]</div><p>Empirical datasheet-style relation; larger supply gives a narrower lock range.</p>
+<h3>5.4 General capture range (derivation)</h3>
+<p>Let F(s) = 1/(1+sτ). When the input is offset by Δω from the VCO, the PD output contains a beat at Δω which the filter attenuates to |F(jΔω)| ≈ 1/(Δωτ) for Δωτ ≫ 1. The beat swing is therefore reduced and the effective loop gain at that frequency is Δω<sub>L</sub>·|F(jΔω)|. For the VCO to be pulled to the input, the swing must at least equal the offset:</p>
+<div class="eq">Δω<sub>C</sub> ≈ Δω<sub>L</sub> · |F(jΔω<sub>C</sub>)| ≈ Δω<sub>L</sub> / (Δω<sub>C</sub> τ) &nbsp;⟹&nbsp; <b>Δω<sub>C</sub> ≈ √(Δω<sub>L</sub> / τ)</b></div>
+<p>Valid for Δω<sub>C</sub>τ ≫ 1. Limiting cases: τ → 0 (no filter) gives Δω<sub>C</sub> → Δω<sub>L</sub>; τ → ∞ gives Δω<sub>C</sub> → 0. So the capture range can never exceed the lock range.</p>
+<h3>5.5 LM565 capture range</h3>
+<div class="eq">Δf<sub>C</sub> = ± (1/2π) · √[ 2π Δf<sub>L</sub> / (3.6×10<sup>3</sup> · C<sub>2</sub>) ] &nbsp; [Hz; Δf<sub>L</sub> in Hz, C<sub>2</sub> in F]</div>
+<p>This is 5.4 with τ = 3.6 kΩ·C<sub>2</sub> and Δω = 2πΔf. Note Δf<sub>C</sub> ∝ √Δf<sub>L</sub> and Δf<sub>C</sub> ∝ 1/√C<sub>2</sub>.</p>
+<h3>5.6 Inverse form (design)</h3>
+<div class="eq">C<sub>2</sub> = Δf<sub>L</sub> / (3.6×10<sup>3</sup> · 2π · Δf<sub>C</sub><sup>2</sup>)</div>
+<p>Decibel conversions and power/efficiency equations do not apply to this topic; the filter attenuation can be written 20·log<sub>10</sub>|F(jΔω)| dB if needed.</p>
+<h3>Interactive calculator (LM565)</h3>
+<div class="calc">
+<div><label for="cf0">f<sub>0</sub> (Hz)</label><input id="cf0" type="number" value="10000" min="1"></div>
+<div><label for="cv">Total supply V (V)</label><input id="cv" type="number" value="12" min="1" step="0.5"></div>
+<div><label for="cc">C<sub>2</sub> (µF)</label><input id="cc" type="number" value="1" min="0.001" step="0.1"></div></div>
+<button id="cbtn">Calculate</button><div class="out" id="cout" aria-live="polite"></div>
+</section>
+
+<section id="solved"><h2>6. Solved numerical problems</h2>
+<h3>Problem 1 (Easy) – Lock range</h3>
+<p><b>Given:</b> LM565, f<sub>0</sub> = 10 kHz, supply ±6 V. <b>Find:</b> lock range and locking band.<br><b>Formula:</b> Δf<sub>L</sub> = ±7.8f<sub>0</sub>/V, V = 6 − (−6) = 12 V.<br>Δf<sub>L</sub> = ±7.8 × 10 000 Hz / 12 = ±6 500 Hz = <b>±6.5 kHz</b>. Band: 10 − 6.5 = 3.5 kHz to 10 + 6.5 = 16.5 kHz.<br><i>Interpretation:</i> once locked, the PLL follows inputs from 3.5 kHz to 16.5 kHz.</p>
+<h3>Problem 2 (Moderate) – Capture range</h3>
+<p><b>Given:</b> same PLL, C<sub>2</sub> = 1 µF. <b>Find:</b> Δf<sub>C</sub>.<br>Δf<sub>C</sub> = (1/2π)√[2π × 6500 / (3600 × 1×10<sup>−6</sup>)] = (1/2π)√[40 841 / 0.0036] = (1/2π)√(1.1345×10<sup>7</sup>) = 3 368 / 6.283 ≈ <b>±536 Hz</b>.<br>Capture band ≈ 9.464 kHz to 10.536 kHz.<br><i>Interpretation:</i> only about 8% of the lock range is capturable – the PLL must start close to f<sub>0</sub>. Check: Δω<sub>C</sub>τ = 3368 × 3.6 ms ≈ 12 ≫ 1, so the approximation is valid.</p>
+<h3>Problem 3 (GATE-style, Difficult) – Design</h3>
+<p><b>Given:</b> R<sub>T</sub> = 10 kΩ, C<sub>T</sub> = 0.01 µF, supply ±5 V, required Δf<sub>C</sub> = ±300 Hz. <b>Find:</b> f<sub>0</sub>, Δf<sub>L</sub>, and C<sub>2</sub>.<br>f<sub>0</sub> = 1.2/(4 × 10⁴ × 10⁻⁸) = 1.2/(4×10⁻⁴) = <b>3 kHz</b>.<br>V = 10 V, Δf<sub>L</sub> = 7.8 × 3000/10 = <b>±2 340 Hz</b>.<br>C<sub>2</sub> = Δf<sub>L</sub>/(3600 × 2π × Δf<sub>C</sub>²) = 2340/(3600 × 6.2832 × 9×10⁴) = 2340/2.0358×10⁹ ≈ <b>1.15 µF</b>.<br><i>Interpretation:</i> choose a standard 1 µF or 1.2 µF capacitor; 1 µF gives Δf<sub>C</sub> ≈ √(1.149) × 300 ≈ 322 Hz.</p>
+<div class="key"><b>Shortcut:</b> Δf<sub>C</sub> ∝ √Δf<sub>L</sub>/√C<sub>2</sub>. Quadruple C<sub>2</sub> ⇒ halve the capture range; double Δf<sub>L</sub> ⇒ ×√2.</div>
+</section>
+
+<section id="gate"><h2>7. GATE examination preparation</h2>
+<p>Ten <b>original</b> GATE-style questions (not actual previous-year questions). Select answers, press <b>Check Answers</b>, or use <b>Show solution</b> on any single question.</p>
+<div id="gq"></div>
+<button onclick="chk('gq',G)">Check Answers</button><button class="sec" onclick="rst('gq',G)">Reset</button><div class="score" id="gq_s" aria-live="polite"></div>
+<h3>Frequently tested concepts</h3><ul><li>Capture ≤ lock; capture depends on loop filter.</li><li>Lock range depends on loop gain, not on filter bandwidth.</li><li>565 formulas: f<sub>0</sub>, ±7.8f<sub>0</sub>/V and the capture formula.</li><li>Phase error at lock edge = π/2; FM demodulation, frequency multiplication, synthesis.</li></ul></section>
+
+<section id="interview"><h2>8. Core electronics interview preparation</h2>
+<div id="iq"></div>
+<h3>Industry perspective</h3><p>Real PLLs inside SoCs, RF transceivers and SerDes are charge-pump PLLs with frequency detectors. Designers choose loop bandwidth for the trade-off between lock time, jitter, and spur rejection, and verify acquisition across PVT corners and over-voltage start-up in Cadence/Spectre or Multisim-level models. Validation engineers sweep input frequency up and down to measure the lock/unlock thresholds.</p></section>
+
+<section id="apps"><h2>9. Applications and industry relevance</h2>
+<table><tr><th>Application</th><th>How capture/lock range matters</th></tr>
+<tr><td>FM demodulator</td><td>Lock range must cover the full deviation (e.g. ±75 kHz broadcast FM); V<sub>c</sub> is the recovered audio</td></tr>
+<tr><td>Frequency synthesizer (radio, Wi-Fi, mobile)</td><td>Capture range limits channel-switching start-up; wide acquisition improves lock time</td></tr>
+<tr><td>Clock and data recovery (USB, PCIe, Ethernet)</td><td>Capture range must cover the transmitter/receiver ppm offset</td></tr>
+<tr><td>Tone decoder (LM567, telephony)</td><td>Narrow capture band gives frequency selectivity</td></tr>
+<tr><td>Motor speed control, clock multiplication in MCUs/FPGAs</td><td>Locks core clock to a crystal reference</td></tr></table>
+<p><b>Challenges:</b> false lock on harmonics, cycle slipping, supply-dependent lock range, noise in narrow loops, start-up above capture range. <b>Roles:</b> analog/mixed-signal designer, RF engineer, clocking/PLL designer, hardware validation, semiconductor test, FPGA clocking engineer.</p></section>
+
+<section id="quiz"><h2>10. Interactive topic quiz (10 questions)</h2>
+<div id="tq"></div>
+<button onclick="chk('tq',Q)">Check Answers</button><button class="sec" onclick="rst('tq',Q)">Reset Quiz</button><div class="score" id="tq_s" aria-live="polite"></div></section>
+
+<section id="revision"><h2>11. Revision materials</h2>
+<h3>Formula sheet</h3>
+<table><tr><th>Quantity</th><th>Formula</th></tr>
+<tr><td>Free-running frequency</td><td>f<sub>0</sub> = 1.2/(4R<sub>T</sub>C<sub>T</sub>)</td></tr><tr><td>Lock range (565)</td><td>Δf<sub>L</sub> = ±7.8f<sub>0</sub>/V</td></tr>
+<tr><td>Capture range (565)</td><td>Δf<sub>C</sub> = ±(1/2π)√(2πΔf<sub>L</sub>/(3.6k·C<sub>2</sub>))</td></tr><tr><td>General</td><td>Δω<sub>L</sub> = ±(π/2)K<sub>d</sub>K<sub>o</sub>F(0); Δω<sub>C</sub> ≈ √(Δω<sub>L</sub>/τ)</td></tr></table>
+<h3>Comparison: lock vs capture</h3>
+<table><tr><th>Property</th><th>Lock range</th><th>Capture range</th></tr>
+<tr><td>Start condition</td><td>Already locked</td><td>Unlocked</td></tr><tr><td>Determined by</td><td>DC loop gain, PD range</td><td>Loop gain + filter bandwidth</td></tr>
+<tr><td>Relative size</td><td>Larger</td><td>Smaller (≤ lock)</td></tr><tr><td>Increase C<sub>2</sub></td><td>No change</td><td>Decreases</td></tr><tr><td>Static / dynamic</td><td>Static</td><td>Dynamic</td></tr></table>
+<h3>Quick revision notes</h3><ul><li>Beat note → filter → VCO pull-in → lock.</li><li>Phase error ±90° at the lock edge.</li><li>Memory aid: <b>L</b>ock = <b>L</b>arge, <b>C</b>apture = <b>C</b>ramped.</li><li>Larger supply V ⇒ smaller lock range.</li></ul>
+<h3>Advantages / disadvantages of the PLL</h3><p>+ Selective, noise-tolerant, tracks drifts, no tuned inductors. − Limited acquisition range, can false-lock, filter design sets a trade-off.</p>
+<h3>Troubleshooting</h3>
+<table><tr><th>Symptom</th><th>Likely cause</th></tr>
+<tr><td>Never locks</td><td>Input outside capture range; C<sub>2</sub> too large; wrong f<sub>0</sub></td></tr><tr><td>Locks at a harmonic</td><td>Input has harmonics near f<sub>0</sub> multiples; filter the input</td></tr><tr><td>Loses lock when the supply changes</td><td>Lock range ∝ 1/V; regulate the supply</td></tr><tr><td>Noisy output</td><td>Capture/loop bandwidth too wide</td></tr></table>
+</section>
+</main>
+<footer>Original educational content. Figures marked illustrative are not simulation results. Print or “Save as PDF” from your browser.</footer>
+
+<script>
+const G=[
+{d:"Easy",q:"For a PLL with a first-order loop filter, which relation between capture range Δf<sub>C</sub> and lock range Δf<sub>L</sub> is correct?",o:["Δf<sub>C</sub> &gt; Δf<sub>L</sub> always","Δf<sub>C</sub> ≤ Δf<sub>L</sub>","Δf<sub>C</sub> = 2Δf<sub>L</sub>","They are unrelated"],a:1,e:"Capture needs the beat note to pass the filter, which it does only when it is slow enough; once locked, the loop can hold farther. So capture ≤ lock."},
+{d:"Easy",q:"Which change affects the capture range but not the lock range?",o:["Changing the PD gain","Changing the VCO gain","Changing the loop-filter time constant","Changing the PD range"],a:2,e:"Lock range depends on DC loop gain. Filter time constant shapes only the dynamic capture process."},
+{d:"Moderate",q:"An LM565 with f<sub>0</sub> = 10 kHz uses ±6 V supplies. Its lock range is:",o:["±3.25 kHz","±6.5 kHz","±13 kHz","±1.3 kHz"],a:1,e:"Δf<sub>L</sub> = 7.8 × 10 kHz/12 V = 6.5 kHz. Mistake: using V = 6 instead of the total 12 V gives 13 kHz."},
+{d:"Moderate",q:"In an LM565 loop, C<sub>2</sub> is increased four times with everything else unchanged. The capture range becomes:",o:["4 times","2 times","1/2","1/4"],a:2,e:"Δf<sub>C</sub> ∝ 1/√C<sub>2</sub>. Four times C<sub>2</sub> ⇒ half the capture range. The lock range is unchanged."},
+{d:"Moderate",q:"With a sinusoidal-characteristic phase detector, the static phase error at the edge of the lock range is:",o:["0","π/4 rad","π/2 rad","π rad"],a:2,e:"The PD output is at its linear-range maximum at |θ<sub>e</sub>| = π/2 (90°); beyond it the DC correction cannot grow."},
+{d:"Moderate",q:"An LM565 has f<sub>0</sub> = 20 kHz and ±6 V supplies. The lowest input frequency at which a locked PLL still stays locked is:",o:["7 kHz","13 kHz","33 kHz","10 kHz"],a:0,e:"Δf<sub>L</sub> = 7.8×20/12 = 13 kHz, so the lower limit is 20 − 13 = 7 kHz."},
+{d:"Moderate",q:"The input frequency is inside the lock range but outside the capture range, and the PLL is currently unlocked. What happens?",o:["It locks immediately","It generally fails to acquire lock","It locks after 1 s","The lock range automatically shrinks"],a:1,e:"Acquisition is governed by the capture range. Inside the lock range does not help an unlocked loop; the beat note is too strongly filtered."},
+{d:"Difficult",q:"All else equal, the lock range of a PLL is doubled. The capture range (Δω<sub>C</sub> ≈ √(Δω<sub>L</sub>/τ)) changes by a factor of:",o:["2","√2","1/√2","4"],a:1,e:"Δω<sub>C</sub> ∝ √Δω<sub>L</sub>. Doubling gives √2 ≈ 1.41."},
+{d:"Difficult",q:"If the loop-filter time constant τ → 0 (no filtering), the capture range tends to:",o:["Zero","Infinity","The lock range","Half the lock range"],a:2,e:"With no attenuation the loop sees its full gain at any offset, so capture approaches lock, which is its upper bound."},
+{d:"Difficult",q:"A PLL has lock range Δf<sub>L</sub> = 4 kHz and filter time constant τ = 1 ms. Using Δω<sub>C</sub> ≈ √(Δω<sub>L</sub>/τ), the capture range is approximately:",o:["80 Hz","400 Hz","800 Hz","4 kHz"],a:2,e:"Δω<sub>L</sub> = 2π × 4000 = 25 133 rad/s. Δω<sub>C</sub> = √(25 133/10⁻³) = 5 013 rad/s ⇒ Δf<sub>C</sub> = 5013/2π ≈ 798 Hz ≈ 800 Hz. Check: Δω<sub>C</sub>τ ≈ 5 ≫ 1 (reasonable approximation)."}];
+const Q=[
+{q:"The lock range is the band of input frequencies over which a PLL:",o:["Acquires lock from the unlocked state","Stays locked once already locked","Has zero phase error","Has no beat note"],a:1,e:"That is the definition of lock (hold) range."},
+{q:"The capture range is the band over which a PLL:",o:["Remains locked","Can acquire lock from the unlocked state","Produces maximum output","Has maximum noise"],a:1,e:"Capture (pull-in) range describes acquisition."},
+{q:"Which is always true?",o:["Capture range &gt; lock range","Capture range ≤ lock range","Capture = lock","Capture = 2 × lock"],a:1,e:"The filter can only reduce the effective loop gain during acquisition."},
+{q:"Which PLL block mainly determines the capture range?",o:["Input coupling capacitor","Loop filter","Output buffer","Supply decoupling capacitor"],a:1,e:"The filter bandwidth sets how much of the beat note passes to the VCO."},
+{q:"In the locked state the VCO frequency is:",o:["Equal to f<sub>0</sub> always","Equal to the input frequency","Twice the input","Zero"],a:1,e:"Lock means f<sub>VCO</sub> = f<sub>in</sub> (with constant phase error)."},
+{q:"For the LM565, the lock range is proportional to:",o:["f<sub>0</sub>·V","f<sub>0</sub>/V","V/f<sub>0</sub>","C<sub>2</sub>"],a:1,e:"Δf<sub>L</sub> = ±7.8f<sub>0</sub>/V, V = total supply."},
+{q:"Increasing C<sub>2</sub> in the 565 loop filter will:",o:["Widen the capture range","Narrow the capture range","Narrow the lock range","Raise f<sub>0</sub>"],a:1,e:"Δf<sub>C</sub> ∝ 1/√C<sub>2</sub>; C<sub>2</sub> does not set lock range or f<sub>0</sub>."},
+{q:"With a sinusoidal PD, the phase error at the lock-range limit is:",o:["0°","45°","90°","180°"],a:2,e:"π/2 rad is the end of the useful PD range."},
+{q:"The free-running frequency is the VCO frequency when:",o:["The input is at its maximum","There is no input signal (loop open at rest)","The loop is locked at the lock edge","C<sub>2</sub> is shorted"],a:1,e:"f<sub>0</sub> is the VCO's rest frequency."},
+{q:"A PLL works as an FM demodulator because the control voltage V<sub>c</sub>:",o:["Is constant","Follows the input frequency deviation","Equals f<sub>0</sub>","Is zero"],a:1,e:"V<sub>c</sub> ∝ (f<sub>in</sub> − f<sub>0</sub>), which is the demodulated message."}];
+const I=[
+["Define lock range and capture range.","Lock range: frequencies over which an already-locked PLL keeps lock. Capture range: frequencies from which an unlocked PLL acquires lock. Capture ≤ lock."],
+["Why is capture range smaller than lock range?","During acquisition the beat note must pass the loop filter. The filter attenuates it, so the effective loop gain is lower than the DC gain that sets the lock range."],
+["How would you widen the capture range without changing the lock range?","Reduce the loop-filter time constant (smaller C₂ in a 565). Trade-off: more noise/spur passes and a less stable filtered loop."],
+["Follow-up: what if lock time is too long but noise must stay low?","Use a frequency detector or charge-pump PFD for acquisition, a variable-bandwidth loop (wide at start, narrow after lock), or a frequency-sweep aid."],
+["Your PLL locks when you sweep frequency up but not when you start at the same frequency. Why?","Starting at that frequency may be inside the lock range but outside the capture range, so it won't acquire. Hysteresis: lock is lost at a different frequency than capture."],
+["Lab question: how do you measure both ranges on a bench?","Capture: start far from f₀ and step the generator toward f₀ until the output suddenly follows (scope shows steady Vc). Lock: with PLL locked, sweep away from f₀ slowly until lock breaks. Use slow steps to avoid dynamic errors."],
+["Simulation: Multisim shows no lock though f<sub>in</sub> = f₀. What do you check?","Supply polarity and magnitude, R_T/C_T values (f₀), input amplitude and coupling, C₂ value, pin connections, simulation time step/length (the beat transient can be long), initial conditions."],
+["Debug: the output lock range shrank after the supply was raised from 10 V to 12 V. Is this a fault?","No. Δf_L = 7.8 f₀/V is inversely proportional to the total supply."],
+["Design question: you need f₀ = 3 kHz, lock ±2.34 kHz, capture ±300 Hz with a 565.","V = 10 V (±5 V). R_T C_T = 1.2/(4 × 3000) = 10⁻⁴ s (e.g. 10 kΩ, 0.01 µF). C₂ = Δf_L/(3.6k·2π·Δf_C²) ≈ 1.15 µF."],
+["Why does a PLL-based clock generator use a narrow loop bandwidth, and how do you still acquire?","Narrow bandwidth rejects reference jitter and noise but gives small capture range. A frequency-aided or multi-mode acquisition loop closes the gap, then hands over to the narrow phase loop."]];
+function build(id,arr,diff){const el=document.getElementById(id);el.innerHTML=arr.map((x,i)=>`<div class="q" id="${id}${i}"><b>Q${i+1}.</b>${diff?`<span class="tag ${x.d}">${x.d}</span>`:""} ${x.q}${x.o.map((t,j)=>`<label><input type="radio" name="${id}${i}" value="${j}">${"ABCD"[j]}. ${t}</label>`).join("")}<button class="sec" type="button" onclick="sol('${id}${i}')">Show solution</button><div class="ex" id="${id}${i}e"></div></div>`).join("")}
+function sol(i){document.getElementById(i+"e").classList.toggle("show")}
+function chk(id,arr){let s=0,u=0;arr.forEach((x,i)=>{const b=document.getElementById(id+i),r=b.querySelector("input:checked"),e=document.getElementById(id+i+"e");b.classList.remove("ok","no","un");let m;if(!r){u++;b.classList.add("un");m='<div class="fb" style="color:var(--amb)">Unanswered.</div>'}else if(+r.value===x.a){s++;b.classList.add("ok");m='<div class="fb" style="color:var(--ok)">Correct.</div>'}else{b.classList.add("no");m=`<div class="fb" style="color:var(--bad)">Incorrect – your answer: ${"ABCD"[r.value]}.</div>`}
+e.innerHTML=m+`<b>Answer: ${"ABCD"[x.a]}.</b> ${x.e}`;e.classList.add("show")});
+document.getElementById(id+"_s").textContent=`Score: ${s}/${arr.length} (${Math.round(100*s/arr.length)}%)`+(u?` – ${u} unanswered`:"")}
+function rst(id,arr){arr.forEach((x,i)=>{const b=document.getElementById(id+i);b.classList.remove("ok","no","un");b.querySelectorAll("input").forEach(r=>r.checked=false);const e=document.getElementById(id+i+"e");e.classList.remove("show");e.innerHTML=""});document.getElementById(id+"_s").textContent=""}
+build("gq",G,true);build("tq",Q,false);
+G.forEach((x,i)=>{});
+document.getElementById("iq").innerHTML=I.map((x,i)=>`<details><summary>Q${i+1}. ${x[0]}</summary><p>${x[1]}</p></details>`).join("");
+function calc(){const f0=+cf0.value,V=+cv.value,C=+cc.value*1e-6;if(!(f0>0&&V>0&&C>0)){cout.textContent="Enter positive values.";return}
+const fl=7.8*f0/V,fc=Math.sqrt(2*Math.PI*fl/(3600*C))/(2*Math.PI),cap=Math.min(fc,fl);
+cout.innerHTML=`Δf<sub>L</sub> = ±${fl.toFixed(1)} Hz → lock band ${(f0-fl).toFixed(0)}–${(f0+fl).toFixed(0)} Hz<br>Δf<sub>C</sub> = ±${fc.toFixed(1)} Hz → capture band ${(f0-cap).toFixed(0)}–${(f0+cap).toFixed(0)} Hz`+(fc>fl?"<br>(Approximation invalid: capture would exceed lock; capture is limited to lock range.)":"");
+const W=660,x=v=>60+(v-(f0-fl*1.3))/(2.6*fl)*540,sv=document.getElementById("fsvg");
+sv.innerHTML=`<g><line x1="40" y1="130" x2="640" y2="130" stroke="currentColor" stroke-width="2"/><rect x="${x(f0-fl)}" y="60" width="${x(f0+fl)-x(f0-fl)}" height="30" fill="var(--acc)" opacity=".35" stroke="var(--acc)"/><rect x="${x(f0-cap)}" y="95" width="${Math.max(2,x(f0+cap)-x(f0-cap))}" height="30" fill="var(--amb)" opacity=".6" stroke="var(--amb)"/><line x1="${x(f0)}" y1="50" x2="${x(f0)}" y2="140" stroke="currentColor" stroke-dasharray="4"/><text x="${x(f0)-20}" y="160" >f0=${f0}</text><text x="${x(f0-fl)}" y="55">lock ${(f0-fl).toFixed(0)}</text><text x="${x(f0+fl)-60}" y="55">${(f0+fl).toFixed(0)} Hz</text><text x="${x(f0+cap)+6}" y="115">capture ±${cap.toFixed(0)} Hz</text></g>`;sv.style.color="var(--ink)"}
+cbtn.onclick=calc;calc();
+</script></body></html>
